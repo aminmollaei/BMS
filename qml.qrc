@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>images/dash12.png</file>
+        <file>images/dash24.png</file>
+        <file>images/dash48.png</file>
+        <file>images/lamp1.png</file>
+        <file>images/lamp2.png</file>
+        <file>images/lamp3.png</file>
+        <file>images/lamp4.png</file>
+        <file>images/lamp5.png</file>
+        <file>images/lamp6.png</file>
+        <file>images/lamp7.png</file>
+        <file>images/lamp8.png</file>
+        <file>images/lamp9.png</file>
+        <file>images/lamp10.png</file>
+        <file>images/exit.png</file>
+        <file>images/DDEMS.png</file>
+        <file>images/exit2.png</file>
+        <file>images/settings.png</file>
+    </qresource>
+</RCC>
