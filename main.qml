@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Material 2.12
+import SerialInterface 1.0
 
 ApplicationWindow {
     width: 640
@@ -13,6 +14,16 @@ ApplicationWindow {
                                 false, false, false, false,
                                 false, false, false, false,
                                 false, false, false, false]
+
+    SerialInterface{
+        id: serialInterface
+        Component.onCompleted: serialInterface.startSerial()
+        onSetRelayData: {
+           var data_in = serialInterface.getRelayData()
+           relayStatus = data_in
+           //console.log(data_in)
+        }
+    }
 
     background: Rectangle{
         width: parent.width
