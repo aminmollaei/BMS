@@ -1,4 +1,4 @@
-QT += quick serialport
+QT += quick
 
 CONFIG += c++11
 
@@ -8,6 +8,7 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
+        serial/serialib.cpp \
         serialinterface.cpp
 
 RESOURCES += qml.qrc
@@ -24,4 +25,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    serial/serialib.h \
     serialinterface.h

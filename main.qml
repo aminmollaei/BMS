@@ -1,6 +1,6 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.5
-import QtQuick.Controls.Material 2.12
+import QtQuick 2.10
+import QtQuick.Controls 2.2
+//import QtQuick.Controls.Material 2.12
 import SerialInterface 1.0
 
 ApplicationWindow {
@@ -8,21 +8,22 @@ ApplicationWindow {
     height: 480
     visible: true
     title: qsTr("Relay Control")
-    visibility: 'FullScreen'
+//    visibility: 'FullScreen'
 
     property var relayStatus: [false, false, false, false,
                                 false, false, false, false,
                                 false, false, false, false,
                                 false, false, false, false]
+    property bool serialStatus: false
 
     SerialInterface{
         id: serialInterface
         Component.onCompleted: serialInterface.startSerial()
         onSetRelayData: {
-           var data_in = serialInterface.getRelayData()
-           relayStatus = data_in
-           //console.log(data_in)
+            relayStatus = signal_data
         }
+        onSerial_opened: serialStatus = true
+        onSerial_closed: serialStatus = false
     }
 
     background: Rectangle{
@@ -50,12 +51,13 @@ ApplicationWindow {
                     Rectangle{
                         width: parent.width
                         height: parent.height * 12/100
-                        Image {
-                            height: parent.height * 8/10
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            source: 'qrc:/images/DDEMS.png'
-                        }
+                        color: 'transparent'
+//                        Image {
+//                            height: parent.height * 8/10
+//                            anchors.verticalCenter: parent.verticalCenter
+//                            anchors.horizontalCenter: parent.horizontalCenter
+//                            source: 'qrc:/images/DDEMS.png'
+//                        }
                     }
 
                     Row{
@@ -147,6 +149,7 @@ ApplicationWindow {
             id: relayColumn
             width: parent.width * 75/100
             height: parent.height * 9/10
+            spacing: height * 5/100
 
             Grid{
                 id: panelGrid
@@ -168,7 +171,7 @@ ApplicationWindow {
                             height: parent.height
                             color: 'transparent'//'#181920'
                             border.width: 1
-                            border.color: '#282830'//'#101012'
+                            border.color: '#101012' //'#282830'//'#101012'
                             Image {
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 anchors.verticalCenter: parent.verticalCenter
@@ -177,6 +180,7 @@ ApplicationWindow {
                             MouseArea{
                                 anchors.fill: parent
                                 onClicked: {
+                                    serialInterface.changeState(index, relayStatus[index])
                                     var tmp = []
                                     var i = 0
                                     for(;i<16;i++)
@@ -225,6 +229,33 @@ ApplicationWindow {
 //                            }
 //                        }
 //                    }
+                }
+            }
+
+            Rectangle{
+                id: connectionRct
+                width: parent.width * (serialStatus ? 1/10 : 2/10)
+                height: parent.height * 5/100
+                anchors.horizontalCenter: parent.horizontalCenter
+                radius: 5
+                color: serialStatus ? '#2FB000' : '#B0002F'
+                Label{
+                    id: connectionLbl
+                    anchors.centerIn: parent
+                    text: serialStatus ? 'CONNECTED' : 'DISCONNECTED'
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        if(serialStatus)
+                        {
+                            serialInterface.stopSerial()
+                            serialStatus = false
+                        }
+                        else{
+                            serialStatus = serialInterface.startSerial()
+                        }
+                    }
                 }
             }
         }
