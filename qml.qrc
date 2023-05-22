@@ -15,5 +15,10 @@
         <file>images/chandelier.png</file>
         <file>images/chandelier-off.png</file>
         <file>images/chandelier-on.png</file>
+        <file>images/hidden strip light-on.png</file>
+        <file>images/hidden strip light-off.png</file>
+        <file>images/halogen-off.png</file>
+        <file>images/halogen-on.png</file>
+        <file>images/all.png</file>
     </qresource>
 </RCC>

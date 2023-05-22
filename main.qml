@@ -12,13 +12,18 @@ ApplicationWindow {
     title: qsTr("Relay Control")
     visibility: 'FullScreen'
 
-    property var relayStatus: [true, false, false, false,
+    property var relayStatus: [false, false, false, false,
         false, false, false, false,
         false, false, false, false,
         false, false, false, false]
 
-    property var relayLabel: ['chandelier', 'chandelier', 'chandelier', 'chandlier',
-                                'strip', 'halogen', 'halogen', '',
+    property var relayLabel: ['chandelier', 'chandelier', 'chandelier', 'chandelier',
+                                'hidden strip light', 'halogen', 'halogen', '',
+                                '', '', '', '', '',
+                                '', '', '', '']
+
+    property var relayFarsiLabel: ['لوستر', 'لوستر', 'لوستر', 'لوستر',
+                                'نور مخفی', 'هالوژن', 'هالوژن', '',
                                 '', '', '', '', '',
                                 '', '', '', '']
 
@@ -308,6 +313,7 @@ ApplicationWindow {
                             MouseArea{
                                 anchors.fill: parent
                                 onClicked: pageNumber=6
+                                enabled: false
                             }
                         }
                     }
@@ -344,7 +350,7 @@ ApplicationWindow {
             id: relayColumn
             width: parent.width * 75/100
             height: parent.height * 9/10
-            spacing: height * 5/100
+            spacing: height * 10/100
             visible: pageNumber<=1
             Grid{
                 id: panelGrid
@@ -380,11 +386,11 @@ ApplicationWindow {
 //                                    id: rectImg
                                     anchors.right: parent.right
 //                                    anchors.rightMargin: parent.width * 5/100
-                                    source: 'qrc:/images/chandelier-' + (relayStatus[index]? 'on':'off')+ '.png'
+                                    source: 'qrc:/images/' + relayLabel[index] + '-' + (relayStatus[index]? 'on':'off')+ '.png'
                                 }
 
                                 Label{
-                                    text: 'لوستر'
+                                    text: relayFarsiLabel[index]
                                     color: '#FE8A1F'
                                     font.family: 'Inter'
                                     font.pixelSize: parent.width * 8/100
@@ -392,7 +398,7 @@ ApplicationWindow {
                                 }
 
                                 Label{
-                                    text: 'Chandelier'
+                                    text: relayLabel[index]
                                     color: '#FFFFFF'
                                     font.family: 'Inter'
                                     font.pixelSize: parent.width * 7/100
@@ -409,18 +415,18 @@ ApplicationWindow {
                                     width: parent.width * 4/10
                                     height: parent.height * 6/10 + relayStatus[index]
                                     anchors.verticalCenter: parent.verticalCenter
-                                    color: relayStatus[index] ? '#33E6B5' : '#FFFFFF'
+                                    color: relayStatus[index] ? '#33B5E6' : '#B3B3B3'
                                     radius: 5
                                     Rectangle{
                                         width: parent.width - 5
                                         height: parent.height
                                         x: 5
-                                        color: relayStatus[index] ? '#33E6B5' : '#FFFFFF'
+                                        color: relayStatus[index] ? '#33B5E6' : '#B3B3B3'
                                         Label{
                                             anchors.verticalCenter: parent.verticalCenter
                                             anchors.horizontalCenter: parent.horizontalCenter
                                             text: 'ON'
-                                            color: relayStatus[index] ? '#FFFFFF' : '#E633B5'
+                                            color: relayStatus[index] ? '#FFFFFF' : '#33B5E6'
                                         }
                                     }
                                 }
@@ -428,17 +434,17 @@ ApplicationWindow {
                                     width: parent.width * 4/10
                                     height: parent.height * 6/10 + !relayStatus[index]
                                     anchors.verticalCenter: parent.verticalCenter
-                                    color: relayStatus[index] ? '#FFFFFF' : '#E633B5'
+                                    color: relayStatus[index] ? '#B3B3B3' : '#33B5E6'
                                     radius: 5
                                     Rectangle{
                                         width: parent.width - 5
                                         height: parent.height
-                                        color: relayStatus[index] ? '#FFFFFF' : '#E633B5'
+                                        color: relayStatus[index] ? '#B3B3B3' : '#33B5E6'
                                         Label{
                                             anchors.verticalCenter: parent.verticalCenter
                                             anchors.horizontalCenter: parent.horizontalCenter
                                             text: 'OFF'
-                                            color: relayStatus[index] ? '#E633B5' : '#FFFFFF'
+                                            color: relayStatus[index] ? '#33B5E6' : '#FFFFFF'
                                         }
                                     }
                                 }
@@ -458,45 +464,6 @@ ApplicationWindow {
                             }
                         }
 
-//                        color: Qt.rgba(0.1, 0.1, 0.1, 0.5)//'transparent'
-                            /*Gradient{
-                            GradientStop{position: 0.5; color:'#181820'}
-                            GradientStop{position: 1.0; color:'#303030'}
-                        }*/
-
-                        //                        Rectangle{
-                        //                            width: parent.width * 9/10
-                        //                            height: parent.height
-                        //                            color: 'transparent'//'#181920'
-                        //                            border.width: 1
-                        //                            border.color: '#101012' //'#282830'//'#101012'
-                        //                            Image {
-                        //                                anchors.horizontalCenter: parent.horizontalCenter
-                        //                                anchors.verticalCenter: parent.verticalCenter
-                        //                                source: 'qrc:/images/' + (relayStatus[index] ? 'lamp10' : 'lamp9') + '.png'
-                        //                            }
-                        //                            MouseArea{
-                        //                                anchors.fill: parent
-                        //                                onClicked: {
-                        //                                    serialInterface.changeState(index, relayStatus[index])
-                        ////                                    var tmp = []
-                        ////                                    var i = 0
-                        ////                                    for(;i<16;i++)
-                        ////                                        tmp.push(relayStatus[i])
-                        ////                                    tmp[index] = !tmp[index]
-                        ////                                    relayStatus = tmp
-                        //                                }
-                        //                            }
-                        //                        }
-
-                        //                        Label{
-                        //                            anchors.left: parent.left
-                        //                            anchors.bottom: parent.bottom
-                        //                            anchors.leftMargin: parent.width * (44-(index>=9?2:0))/100
-                        //                            anchors.bottomMargin: parent.width * 9/100
-                        //                            text: index+1
-                        //                            color: '#454545'
-                        //                        }
 
                     }
                 }
@@ -510,6 +477,7 @@ ApplicationWindow {
                 anchors.bottom: mainWindow.bottom
                 radius: 5
                 color: serialStatus ? '#2FB000' : '#B0002F'
+                visible: false
                 //                Label{
                 //                    id: connectionLbl
                 //                    anchors.centerIn: parent
@@ -528,6 +496,90 @@ ApplicationWindow {
                 //                        }
                 //                    }
                 //                }
+            }
+
+
+            Row{
+                width: parent.width * 4/10
+                height: parent.height * 25/100
+                spacing: width*5/100
+                anchors.horizontalCenter: parent.horizontalCenter
+                Rectangle{
+                    width: parent.width * 45/100
+                    height: parent.height
+                    radius:5
+                    gradient: Gradient{
+                        GradientStop{position: 0.1; color:'#4B4B4B'}
+                        GradientStop{position: 1.0; color:'#232323'}
+                    }
+
+                    Column{
+                        width: parent.width
+                        height: parent.height * 4/10
+                        topPadding: parent.height * 25/100
+                        spacing: height*15/100
+                        Image{
+                            source: 'qrc:/images/all.png'
+                            anchors.horizontalCenter:  parent.horizontalCenter
+                        }
+                        Label{
+                            text: 'روشن کردن همه'
+                            color: '#FE8A1F'
+                            font.family: 'Inter'
+                            font.pixelSize: parent.width * 7/100
+                            anchors.horizontalCenter:  parent.horizontalCenter
+                        }
+                        Label{
+                            text: 'Turn all on'
+                            color: '#FFFFFF'
+                            font.family: 'Inter'
+                            font.pixelSize: parent.width * 7/100
+                            anchors.horizontalCenter:  parent.horizontalCenter
+                        }
+                    }
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: serialInterface.changeState(30, false)
+                    }
+                }
+                Rectangle{
+                    width: parent.width * 45/100
+                    height: parent.height
+                    radius:5
+                    gradient: Gradient{
+                        GradientStop{position: 0.1; color:'#4B4B4B'}
+                        GradientStop{position: 1.0; color:'#232323'}
+                    }
+
+                    Column{
+                        width: parent.width
+                        height: parent.height * 4/10
+                        topPadding: parent.height * 25/100
+                        spacing: height*15/100
+                        Image{
+                            source: 'qrc:/images/all.png'
+                            anchors.horizontalCenter:  parent.horizontalCenter
+                        }
+                        Label{
+                            text: 'خاموش کردن همه'
+                            color: '#FE8A1F'
+                            font.family: 'Inter'
+                            font.pixelSize: parent.width * 7/100
+                            anchors.horizontalCenter:  parent.horizontalCenter
+                        }
+                        Label{
+                            text: 'Turn all off'
+                            color: '#FFFFFF'
+                            font.family: 'Inter'
+                            font.pixelSize: parent.width * 7/100
+                            anchors.horizontalCenter:  parent.horizontalCenter
+                        }
+                    }
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: serialInterface.changeState(30, true)
+                    }
+                }
             }
         }
 
