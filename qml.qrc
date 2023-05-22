@@ -7,5 +7,13 @@
         <file>images/dash24.png</file>
         <file>images/lamp10.png</file>
         <file>images/Group 4.png</file>
+        <file>images/HVAC.png</file>
+        <file>images/scenarios.png</file>
+        <file>images/security.png</file>
+        <file>images/camera.png</file>
+        <file>images/intercom.png</file>
+        <file>images/chandelier.png</file>
+        <file>images/chandelier-off.png</file>
+        <file>images/chandelier-on.png</file>
     </qresource>
 </RCC>

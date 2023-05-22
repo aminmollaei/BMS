@@ -16,7 +16,15 @@ ApplicationWindow {
         false, false, false, false,
         false, false, false, false,
         false, false, false, false]
+
+    property var relayLabel: ['chandelier', 'chandelier', 'chandelier', 'chandlier',
+                                'strip', 'halogen', 'halogen', '',
+                                '', '', '', '', '',
+                                '', '', '', '']
+
+
     property bool serialStatus: false
+    property int pageNumber: 0
 
     SerialInterface{
         id: serialInterface
@@ -68,13 +76,13 @@ ApplicationWindow {
                         Rectangle{
                             width: parent.width * 1/100
                             height: parent.height
-                            color: '#004080'
+                            color: pageNumber==0?'#004080':'transparent'
                         }
 
                         Rectangle{
                             width: parent.width * 99/100
                             height: parent.height
-                            color: 'transparent'//'#1b1b23'
+                            color: pageNumber==0?'#121212':'trnasparent'
                             Image {
                                 x: parent.width * 5/100
                                 anchors.verticalCenter: parent.verticalCenter
@@ -86,7 +94,11 @@ ApplicationWindow {
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: '#FFFFFF'
                                 font.pixelSize: parent.width * 1/10
-                                text: 'Dashboard'
+                                text: 'Lightning'
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: pageNumber=0
                             }
                         }
                     }
@@ -98,45 +110,226 @@ ApplicationWindow {
                         Rectangle{
                             width: parent.width * 1/100
                             height: parent.height
-                            color: 'transparent'//'#004080'
+                            color: pageNumber==1?'#004080':'transparent'
                         }
 
                         Rectangle{
                             width: parent.width * 99/100
                             height: parent.height
-                            color: 'transparent'//'#1b1b23'
+                            color: pageNumber==1?'#121212':'trnasparent'
+                            Image {
+                                x: parent.width * 5/100
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: 'qrc:/images/HVAC.png'
+                            }
+                            Label{
+                                //                                anchors.horizontalCenter: parent.horizontalCenter
+                                x: parent.width * 2/10
+                                anchors.verticalCenter: parent.verticalCenter
+                                color: '#FFFFFF'
+                                font.pixelSize: parent.width * 1/10
+                                text: 'HVAC'
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: pageNumber=1
+                                enabled: false
+                            }
+                        }
+                    }
+
+                    Row{
+                        width: parent.width * 98/100
+                        height: parent.height * 10/100
+                        x: parent.width * 2/100
+                        Rectangle{
+                            width: parent.width * 1/100
+                            height: parent.height
+                            color: pageNumber==2?'#004080':'transparent'
+                        }
+
+                        Rectangle{
+                            width: parent.width * 99/100
+                            height: parent.height
+                            color: pageNumber==2?'#121212':'trnasparent'
+                            Image {
+                                x: parent.width * 5/100
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: 'qrc:/images/scenarios.png'
+                            }
+                            Label{
+                                //                                anchors.horizontalCenter: parent.horizontalCenter
+                                x: parent.width * 2/10
+                                anchors.verticalCenter: parent.verticalCenter
+                                color: '#FFFFFF'
+                                font.pixelSize: parent.width * 1/10
+                                text: 'Scenarios'
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: pageNumber=2
+                                enabled: false
+                            }
+                        }
+                    }
+
+                    Row{
+                        width: parent.width * 98/100
+                        height: parent.height * 10/100
+                        x: parent.width * 2/100
+                        Rectangle{
+                            width: parent.width * 1/100
+                            height: parent.height
+                            color: pageNumber==3?'#004080':'transparent'
+                        }
+
+                        Rectangle{
+                            width: parent.width * 99/100
+                            height: parent.height
+                            color: pageNumber==3?'#121212':'trnasparent'
+                            Image {
+                                x: parent.width * 5/100
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: 'qrc:/images/intercom.png'
+                            }
+                            Label{
+                                //                                anchors.horizontalCenter: parent.horizontalCenter
+                                x: parent.width * 2/10
+                                anchors.verticalCenter: parent.verticalCenter
+                                color: '#FFFFFF'
+                                font.pixelSize: parent.width * 1/10
+                                text: 'Intercom'
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: pageNumber=3
+                                enabled: false
+                            }
+                        }
+                    }
+
+                    Row{
+                        width: parent.width * 98/100
+                        height: parent.height * 10/100
+                        x: parent.width * 2/100
+                        Rectangle{
+                            width: parent.width * 1/100
+                            height: parent.height
+                            color: pageNumber==4?'#004080':'transparent'
+                        }
+
+                        Rectangle{
+                            width: parent.width * 99/100
+                            height: parent.height
+                            color: pageNumber==4?'#121212':'trnasparent'
+                            Image {
+                                x: parent.width * 5/100
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: 'qrc:/images/security.png'
+                            }
+                            Label{
+                                //                                anchors.horizontalCenter: parent.horizontalCenter
+                                x: parent.width * 2/10
+                                anchors.verticalCenter: parent.verticalCenter
+                                color: '#FFFFFF'
+                                font.pixelSize: parent.width * 1/10
+                                text: 'Security'
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: pageNumber=4
+                                enabled: false
+                            }
+                        }
+                    }
+
+                    Row{
+                        width: parent.width * 98/100
+                        height: parent.height * 10/100
+                        x: parent.width * 2/100
+                        Rectangle{
+                            width: parent.width * 1/100
+                            height: parent.height
+                            color: pageNumber==5?'#004080':'transparent'
+                        }
+
+                        Rectangle{
+                            width: parent.width * 99/100
+                            height: parent.height
+                            color: pageNumber==5?'#121212':'trnasparent'
+                            Image {
+                                x: parent.width * 5/100
+                                anchors.verticalCenter: parent.verticalCenter
+                                source: 'qrc:/images/camera.png'
+                            }
+                            Label{
+                                //                                anchors.horizontalCenter: parent.horizontalCenter
+                                x: parent.width * 2/10
+                                anchors.verticalCenter: parent.verticalCenter
+                                color: '#FFFFFF'
+                                font.pixelSize: parent.width * 1/10
+                                text: 'camera'
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: pageNumber=5
+                                enabled: false
+                            }
+                        }
+                    }
+
+                    Row{
+                        width: parent.width * 98/100
+                        height: parent.height * 10/100
+                        x: parent.width * 2/100
+                        Rectangle{
+                            width: parent.width * 1/100
+                            height: parent.height
+                            color: pageNumber==6?'#004080':'transparent'
+                        }
+
+                        Rectangle{
+                            width: parent.width * 99/100
+                            height: parent.height
+                            color: pageNumber==6?'#121212':'trnasparent'
                             Image {
                                 x: parent.width * 5/100
                                 anchors.verticalCenter: parent.verticalCenter
                                 source: 'qrc:/images/settings.png'
                             }
                             Label{
+                                //                                anchors.horizontalCenter: parent.horizontalCenter
                                 x: parent.width * 2/10
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: '#FFFFFF'
                                 font.pixelSize: parent.width * 1/10
                                 text: 'Settings'
                             }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: pageNumber=6
+                            }
                         }
                     }
 
 
 
-                    Rectangle{
-                        id: dummySpacer
-                        width: parent.width
-                        height: parent.height * 47/100
-                        color: 'transparent'
-                    }
+//                    Rectangle{
+//                        id: dummySpacer
+//                        width: parent.width
+//                        height: parent.height * 47/100
+//                        color: 'transparent'
+//                    }
 
                     Rectangle{
                         width: parent.width
                         height: parent.height * 2/10
                         color: 'transparent'
-                        visible: true
+//                        visible: true
                         Image {
                             anchors.centerIn: parent
                             source: 'qrc:/images/exit.png'
+                            visible: false
                         }
                         MouseArea{
                             anchors.fill: parent
@@ -152,7 +345,7 @@ ApplicationWindow {
             width: parent.width * 75/100
             height: parent.height * 9/10
             spacing: height * 5/100
-
+            visible: pageNumber<=1
             Grid{
                 id: panelGrid
                 width: parent.width * 8/10
@@ -162,7 +355,7 @@ ApplicationWindow {
                 spacing: width * 2/100
                 Repeater{
                     id: relayRepeatr
-                    model: 8
+                    model: 7
                     Rectangle {
                         width: relayColumn.width * 20/100
                         height: width
@@ -177,15 +370,39 @@ ApplicationWindow {
                             topPadding: parent.height * 5/100
 //                            rightPadding: parent.width * 1/10
                             rotation: -90
-                            Image{
+                            Column{
                                 id: rectImg
-                                anchors.right: parent.right
-                                anchors.rightMargin: parent.width * 5/100
-                                source: 'qrc:/images/Group 4.png'
+                                width: parent.width * 95/100
+                                height: parent.height * 5/10
+                                spacing: height * 1/10
+
+                                Image{
+//                                    id: rectImg
+                                    anchors.right: parent.right
+//                                    anchors.rightMargin: parent.width * 5/100
+                                    source: 'qrc:/images/chandelier-' + (relayStatus[index]? 'on':'off')+ '.png'
+                                }
+
+                                Label{
+                                    text: 'لوستر'
+                                    color: '#FE8A1F'
+                                    font.family: 'Inter'
+                                    font.pixelSize: parent.width * 8/100
+                                    anchors.right: parent.right
+                                }
+
+                                Label{
+                                    text: 'Chandelier'
+                                    color: '#FFFFFF'
+                                    font.family: 'Inter'
+                                    font.pixelSize: parent.width * 7/100
+                                    anchors.right: parent.right
+                                }
+
                             }
                             Row{
                                 width: parent.width
-                                height: parent.height * 9/10 - rectImg.height
+                                height: parent.height * 35/100 /*- rectImg.height*/
                                 leftPadding: width *1/10
                                 topPadding: height * 2/10
                                 Rectangle{
@@ -231,12 +448,13 @@ ApplicationWindow {
                         MouseArea{
                             anchors.fill: parent
                             onClicked: {
-                                var tmp = []
-                                var i = 0
-                                for(;i<16;i++)
-                                    tmp.push(relayStatus[i])
-                                tmp[index] = !tmp[index]
-                                relayStatus = tmp
+                                serialInterface.changeState(index, relayStatus[index])
+//                                var tmp = []
+//                                var i = 0
+//                                for(;i<16;i++)
+//                                    tmp.push(relayStatus[i])
+//                                tmp[index] = !tmp[index]
+//                                relayStatus = tmp
                             }
                         }
 
@@ -313,6 +531,45 @@ ApplicationWindow {
             }
         }
 
+        Column{
+            id: settings
+            width: parent.width * 75/100
+            height: parent.height * 9/10
+            spacing: height * 5/100
+            visible: pageNumber==6
+            Grid{
+                id: settingsGrid
+                width: parent.width * 8/10
+                topPadding: height * 5/100
+                leftPadding: width * 12/100
+                columns: 2
+                spacing: width * 2/100
+                Repeater{
+                    id: settingsRepeater
+                    model: 16
+                    Row{
+                       width: relayColumn.width * 40/100
+                       height: width * 18/100
+                       spacing: width*1/100
+                        Rectangle{
+                            width: parent.width*14/100
+                            height: parent.height
+                            color: 'red'
+                            Label{
+                                text: 'Relay ' + (index+1)
+                                color: 'white'
+                                anchors.centerIn: parent
+                            }
+                        }
 
+                        Rectangle{
+                            width: parent.width*1/10
+                            height: parent.height
+                            color: 'red'
+                        }
+                    }
+                }
+            }
+        }
     }
 }
