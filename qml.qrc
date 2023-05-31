@@ -20,5 +20,10 @@
         <file>images/halogen-off.png</file>
         <file>images/halogen-on.png</file>
         <file>images/all.png</file>
+        <file>images/wall light-off.png</file>
+        <file>images/wall light-on.png</file>
+        <file>images/location.png</file>
+        <file>images/storm.png</file>
+        <file>images/thermometer.png</file>
     </qresource>
 </RCC>
