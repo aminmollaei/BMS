@@ -1,8 +1,9 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.2
-//import QtQuick.Controls.Material 2.12
+import QtQuick.Controls.Material 2.2
 import SerialInterface 1.0
 import QtGraphicalEffects 1.0
+import "./"
 
 ApplicationWindow {
     id: mainWindow
@@ -12,24 +13,58 @@ ApplicationWindow {
     title: qsTr("Relay Control")
     visibility: 'FullScreen'
 
+    readonly property int number_of_relays: 16
     property var relayStatus: [false, false, false, false,
         false, false, false, false,
         false, false, false, false,
         false, false, false, false]
 
-    property var relayLabel: ['chandelier', 'chandelier', 'chandelier', 'chandelier',
-        'hidden strip light', 'halogen', 'halogen', 'wall light',
-        'wall light', '', '', '', '',
-        '', '', '', '']
+    readonly property var pageNames: ['', 'Lightning', 'HVAC', 'Scenarios', 'Intercom', 'Security']
+    readonly property var relayMap: ['', 'chandelier', 'hidden strip light', 'halogen', 'wall light']
+    readonly property var relayFarsiMap: ['', 'لوستر', 'نور مخفی', 'هالوژن', 'چراغ دیواری', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15']
+    property var relayType: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    property var relayPage: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-    property var relayFarsiLabel: ['لوستر', 'لوستر', 'لوستر', 'لوستر',
-        'نور مخفی', 'هالوژن', 'هالوژن', 'چراغ دیواری',
-        'چراغ دیواری', '', '', '', '',
-        '', '', '', '']
+//    property var relayLabel: ['chandelier', 'chandelier', 'chandelier', 'chandelier',
+//        'hidden strip light', 'halogen', 'halogen', 'wall light',
+//        'wall light', '', '', '', '',
+//        '', '', '', '']
+
+//    property var relayFarsiLabel: ['لوستر', 'لوستر', 'لوستر', 'لوستر',
+//        'نور مخفی', 'هالوژن', 'هالوژن', 'چراغ دیواری',
+//        'چراغ دیواری', '', '', '', '',
+//        '', '', '', '']
 
 
     property bool serialStatus: false
-    property int pageNumber: 0
+    property int pageNumber: 1
+
+    property bool loadCompleted: false
+
+
+    function settingsChanged(number, type, place)
+    {
+        if(loadCompleted)
+        {
+            var updateStatus = DBInterface.setRelayConfig(number, type, place)
+            var tmpType = []
+            var tmpPage = []
+            var i
+            for(i=0;i<number_of_relays;i++)
+            {
+                tmpType.push(relayType[i])
+                tmpPage.push(relayPage[i])
+            }
+            if(updateStatus)
+            {
+                tmpType[number] = type
+                tmpPage[number] = place
+            }
+
+            relayType = tmpType
+            relayPage = tmpPage
+        }
+    }
 
     SerialInterface{
         id: serialInterface
@@ -44,13 +79,33 @@ ApplicationWindow {
     background: Rectangle{
         width: parent.width
         height: parent.height
-        color: '#121212' //Material.BlueGrey
+        color: UIStyle.backgroundColor //Material.BlueGrey
     }
 
-    //        Image {
-    //        source: 'qrc:/images/background29.jpg'
-    //    }
+    Component.onCompleted: {
+        var config = DBInterface.getRelayConfigs()
+        var i, number, type, place
+        var tmpType = []
+        var tmpPage = []
+        for(i=0;i<number_of_relays;i++)
+        {
+            tmpType.push(0)
+            tmpPage.push(0)
+        }
 
+        for(i=0;i<number_of_relays;i++)
+        {
+            var tmp = config[i].split(',')
+            number = parseInt(tmp[0])
+            type = parseInt(tmp[1])
+            place = parseInt(tmp[2])
+            tmpType[number] = type
+            tmpPage[number] = place
+        }
+        relayType = tmpType
+        relayPage = tmpPage
+        loadCompleted = true
+    }
 
     Row{
         id: mainRow
@@ -81,13 +136,13 @@ ApplicationWindow {
                         Rectangle{
                             width: parent.width * 1/100
                             height: parent.height
-                            color: pageNumber==0?'#004080':'transparent'
+                            color: pageNumber==1?'#004080':'transparent'
                         }
 
                         Rectangle{
                             width: parent.width * 99/100
                             height: parent.height
-                            color: pageNumber==0?'#121212':'trnasparent'
+                            color: pageNumber==1?'#121212':'trnasparent'
                             Image {
                                 x: parent.width * 5/100
                                 anchors.verticalCenter: parent.verticalCenter
@@ -103,42 +158,7 @@ ApplicationWindow {
                             }
                             MouseArea{
                                 anchors.fill: parent
-                                onClicked: pageNumber=0
-                            }
-                        }
-                    }
-
-                    Row{
-                        width: parent.width * 98/100
-                        height: parent.height * 10/100
-                        x: parent.width * 2/100
-                        Rectangle{
-                            width: parent.width * 1/100
-                            height: parent.height
-                            color: pageNumber==1?'#004080':'transparent'
-                        }
-
-                        Rectangle{
-                            width: parent.width * 99/100
-                            height: parent.height
-                            color: pageNumber==1?'#121212':'trnasparent'
-                            Image {
-                                x: parent.width * 5/100
-                                anchors.verticalCenter: parent.verticalCenter
-                                source: 'qrc:/images/HVAC.png'
-                            }
-                            Label{
-                                //                                anchors.horizontalCenter: parent.horizontalCenter
-                                x: parent.width * 2/10
-                                anchors.verticalCenter: parent.verticalCenter
-                                color: '#FFFFFF'
-                                font.pixelSize: parent.width * 1/10
-                                text: 'HVAC'
-                            }
-                            MouseArea{
-                                anchors.fill: parent
                                 onClicked: pageNumber=1
-                                enabled: false
                             }
                         }
                     }
@@ -160,7 +180,7 @@ ApplicationWindow {
                             Image {
                                 x: parent.width * 5/100
                                 anchors.verticalCenter: parent.verticalCenter
-                                source: 'qrc:/images/scenarios.png'
+                                source: 'qrc:/images/HVAC.png'
                             }
                             Label{
                                 //                                anchors.horizontalCenter: parent.horizontalCenter
@@ -168,7 +188,7 @@ ApplicationWindow {
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: '#FFFFFF'
                                 font.pixelSize: parent.width * 1/10
-                                text: 'Scenarios'
+                                text: 'HVAC'
                             }
                             MouseArea{
                                 anchors.fill: parent
@@ -195,7 +215,7 @@ ApplicationWindow {
                             Image {
                                 x: parent.width * 5/100
                                 anchors.verticalCenter: parent.verticalCenter
-                                source: 'qrc:/images/intercom.png'
+                                source: 'qrc:/images/scenarios.png'
                             }
                             Label{
                                 //                                anchors.horizontalCenter: parent.horizontalCenter
@@ -203,7 +223,7 @@ ApplicationWindow {
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: '#FFFFFF'
                                 font.pixelSize: parent.width * 1/10
-                                text: 'Intercom'
+                                text: 'Scenarios'
                             }
                             MouseArea{
                                 anchors.fill: parent
@@ -230,7 +250,7 @@ ApplicationWindow {
                             Image {
                                 x: parent.width * 5/100
                                 anchors.verticalCenter: parent.verticalCenter
-                                source: 'qrc:/images/security.png'
+                                source: 'qrc:/images/intercom.png'
                             }
                             Label{
                                 //                                anchors.horizontalCenter: parent.horizontalCenter
@@ -238,7 +258,7 @@ ApplicationWindow {
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: '#FFFFFF'
                                 font.pixelSize: parent.width * 1/10
-                                text: 'Security'
+                                text: 'Intercom'
                             }
                             MouseArea{
                                 anchors.fill: parent
@@ -265,7 +285,7 @@ ApplicationWindow {
                             Image {
                                 x: parent.width * 5/100
                                 anchors.verticalCenter: parent.verticalCenter
-                                source: 'qrc:/images/camera.png'
+                                source: 'qrc:/images/security.png'
                             }
                             Label{
                                 //                                anchors.horizontalCenter: parent.horizontalCenter
@@ -273,7 +293,7 @@ ApplicationWindow {
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: '#FFFFFF'
                                 font.pixelSize: parent.width * 1/10
-                                text: 'camera'
+                                text: 'Security'
                             }
                             MouseArea{
                                 anchors.fill: parent
@@ -300,6 +320,41 @@ ApplicationWindow {
                             Image {
                                 x: parent.width * 5/100
                                 anchors.verticalCenter: parent.verticalCenter
+                                source: 'qrc:/images/camera.png'
+                            }
+                            Label{
+                                //                                anchors.horizontalCenter: parent.horizontalCenter
+                                x: parent.width * 2/10
+                                anchors.verticalCenter: parent.verticalCenter
+                                color: '#FFFFFF'
+                                font.pixelSize: parent.width * 1/10
+                                text: 'camera'
+                            }
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked: pageNumber=6
+                                enabled: false
+                            }
+                        }
+                    }
+
+                    Row{
+                        width: parent.width * 98/100
+                        height: parent.height * 10/100
+                        x: parent.width * 2/100
+                        Rectangle{
+                            width: parent.width * 1/100
+                            height: parent.height
+                            color: pageNumber==7?'#004080':'transparent'
+                        }
+
+                        Rectangle{
+                            width: parent.width * 99/100
+                            height: parent.height
+                            color: pageNumber==7?'#121212':'trnasparent'
+                            Image {
+                                x: parent.width * 5/100
+                                anchors.verticalCenter: parent.verticalCenter
                                 source: 'qrc:/images/settings.png'
                             }
                             Label{
@@ -312,8 +367,8 @@ ApplicationWindow {
                             }
                             MouseArea{
                                 anchors.fill: parent
-                                onClicked: pageNumber=6
-                                enabled: false
+                                onClicked: pageNumber=7
+//                                enabled: false
                             }
                         }
                     }
@@ -475,12 +530,13 @@ ApplicationWindow {
                     spacing: width * 3/100
                     Repeater{
                         id: relayRepeatr
-                        model: 9
+                        model: 16
                         Rectangle {
                             width: relayColumn.width * 20/100
                             height: width
                             radius:10
                             rotation: 90
+                            visible: relayPage[index] === pageNumber
                             gradient: Gradient{
                                 GradientStop{position: 0.1; color:'#4B4B4B'}
                                 GradientStop{position: 1.0; color:'#232323'}
@@ -500,11 +556,11 @@ ApplicationWindow {
                                         //                                    id: rectImg
                                         anchors.right: parent.right
                                         //                                    anchors.rightMargin: parent.width * 5/100
-                                        source: 'qrc:/images/' + relayLabel[index] + '-' + (relayStatus[index]? 'on':'off')+ '.png'
+                                        source: 'qrc:/images/' + relayMap[relayType[index]] + '-' + (relayStatus[index]? 'on':'off')+ '.png'
                                     }
 
                                     Label{
-                                        text: relayFarsiLabel[index]
+                                        text: relayFarsiMap[relayType[index]]
                                         color: '#FE8A1F'
                                         font.family: 'Inter'
                                         font.pixelSize: parent.width * 8/100
@@ -512,7 +568,7 @@ ApplicationWindow {
                                     }
 
                                     Label{
-                                        text: relayLabel[index]
+                                        text: relayMap[relayType[index]]
                                         color: '#FFFFFF'
                                         font.family: 'Inter'
                                         font.pixelSize: parent.width * 7/100
@@ -696,9 +752,6 @@ ApplicationWindow {
                 spacing: width*5/100
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible: false
-
-
-
             }
         }
 
@@ -707,36 +760,84 @@ ApplicationWindow {
             width: parent.width * 75/100
             height: parent.height * 9/10
             spacing: height * 5/100
-            visible: pageNumber==6
+            visible: pageNumber==7
             Grid{
                 id: settingsGrid
                 width: parent.width * 8/10
                 topPadding: height * 5/100
-                leftPadding: width * 12/100
+                leftPadding: width * 8/100
                 columns: 2
-                spacing: width * 2/100
+//                spacing: width * 2/100
                 Repeater{
                     id: settingsRepeater
                     model: 16
                     Row{
-                        width: relayColumn.width * 40/100
+                        width: relayColumn.width * 45/100
                         height: width * 18/100
-                        spacing: width*1/100
+                        spacing: width*5/100
                         Rectangle{
                             width: parent.width*14/100
                             height: parent.height
-                            color: 'red'
+                            color: 'transparent'
                             Label{
                                 text: 'Relay ' + (index+1)
                                 color: 'white'
                                 anchors.centerIn: parent
+                                font.pixelSize: parent.width * 25/100
                             }
                         }
+                        ComboBox{
+                            id: labelComboBox
+                            width: parent.width*35/100
+                            height: parent.height * 5/10
+                            editable: true
+                            anchors.verticalCenter: parent.verticalCenter
+                            Material.theme: Material.Dark
+                            Material.accent: Material.Teal
+                            contentItem: Text {
+                                        text: parent.displayText
+                                        font.family: "Arial"
+                                        verticalAlignment: Text.AlignVCenter
+                                        horizontalAlignment: Text.AlignHCenter
+//                                        elide: Text.ElideMiddle
+                                        color: '#FFFFFF'
+                                        font.pixelSize: parent.width * 9/100
+                                    }
+                            background: Rectangle{
+                                width: parent.width
+                                height: parent.height
+                                color: '#191919'
+                            }
+                            model: relayMap
+                            currentIndex: relayType[index]
+                            onCurrentIndexChanged: settingsChanged(index, labelComboBox.currentIndex, pageComboBox.currentIndex)
+                        }
 
-                        Rectangle{
-                            width: parent.width*1/10
-                            height: parent.height
-                            color: 'red'
+                        ComboBox{
+                            id: pageComboBox
+                            width: parent.width*30/100
+                            height: parent.height * 5/10
+                            editable: true
+                            anchors.verticalCenter: parent.verticalCenter
+                            Material.theme: Material.Dark
+                            Material.accent: Material.Teal
+                            contentItem: Text {
+                                        text: parent.displayText
+                                        font.family: "Arial"
+                                        verticalAlignment: Text.AlignVCenter
+                                        horizontalAlignment: Text.AlignHCenter
+//                                        elide: Text.ElideMiddle
+                                        color: '#FFFFFF'
+                                        font.pixelSize: parent.width * 10/100
+                                    }
+                            background: Rectangle{
+                                width: parent.width
+                                height: parent.height
+                                color: '#191919'
+                            }
+                            model: pageNames
+                            currentIndex: relayPage[index]
+                            onCurrentIndexChanged: settingsChanged(index, labelComboBox.currentIndex, pageComboBox.currentIndex)
                         }
                     }
                 }

@@ -1,6 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQuickStyle>
 #include "serialinterface.h"
+#include "dbmanager.h"
 
 int main(int argc, char *argv[])
 {
@@ -11,9 +13,12 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     qmlRegisterType<SerialInterface>("SerialInterface", 1, 0, "SerialInterface");
+    qmlRegisterType<DBManager>("DBManager", 1, 0, "DBManager");
 
 //    std::thread serial_listener (tst);
 //    serial_listener.detach();
+
+    QQuickStyle::setStyle("Material");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

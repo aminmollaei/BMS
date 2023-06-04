@@ -1,0 +1,2 @@
+singleton UIStyle 1.0 qrc:/UIStyle.qml
+singleton DBInterface 1.0 qrc:/DBInterface.qml

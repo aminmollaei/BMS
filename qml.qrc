@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
+        <file>qmldir</file>
+        <file>UIStyle.qml</file>
         <file>main.qml</file>
         <file>images/lamp9.png</file>
         <file>images/settings.png</file>
@@ -25,5 +27,6 @@
         <file>images/location.png</file>
         <file>images/storm.png</file>
         <file>images/thermometer.png</file>
+        <file>DBInterface.qml</file>
     </qresource>
 </RCC>
